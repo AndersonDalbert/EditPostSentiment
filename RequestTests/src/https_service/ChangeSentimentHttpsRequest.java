@@ -2,9 +2,7 @@ package https_service;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -37,7 +35,6 @@ public class ChangeSentimentHttpsRequest {
 		HttpsURLConnection request = (HttpsURLConnection) url.openConnection();
 		
 		String data = "{\"authentication_params\":{\"bm_user\":\"100000724400369\",\"api_key\":\"jhbuAGntkAU3A0_q1f98Dg\"},\"buzzmonitor_username\":\"100000724400369\",\"changes\":{\"monitoring_posts\":[],\"twitter_dms\":[],\"twitter_mentions\":[],\"facebook_pages_wall\":[{\"brand\":\"100000724400369_Other Pages\",\"login\":\"100000724400369\",\"source\":\"fbm\",\"other_pages\":true,\"posts\":[{\"elasticsearch_index\":\"bm-posts-saas-2018-7\",\"elasticsearch_id\":\"facebook-100000724400369_Other Pages-10156195797472535-10156211362362535\",\"sentiment\":\"" + sentiment + "\",\"tags_to_add\":[{\"_id\":\"5afee2cb626d2d7e6ee12c01\",\"created_at\":\"2018-05-18T11:27:23.421-03:00\",\"deleted_at\":null,\"name\":\"Sentiment_Edited\",\"owner_id\":\"5a6078f1626d2d24b38e0100\",\"source\":null,\"sub_tags\":[],\"updated_at\":\"2018-05-18T11:27:23.421-03:00\",\"value\":\"20180717124246_add_time_to_tag_func###100000724400369_add_username_to_tag_func###\",\"selection\":\"blank\",\"user_login\":\"100000724400369\"}],\"tags_to_edit\":[],\"tags_to_remove\":[],\"page_id\":\"348593577534\"}]}],\"facebook_private_messages\":[],\"linkedin_updates\":[]}}";
-		System.out.println(data);
 
 		request.setRequestMethod("POST");
 		request.setRequestProperty("Accept", ACCEPT);
@@ -54,11 +51,12 @@ public class ChangeSentimentHttpsRequest {
 		outputStream.close();
 
 		setResponseCode( request.getResponseCode() );
-		System.out.println( this.getResponseCode() );
 
 		InputStreamReader streamReader = new InputStreamReader( request.getInputStream() );
 		setResponse( buildReturn(streamReader) );
-		System.out.println( getResponse() );
+		
+		System.out.println("Response code: " + this.getResponseCode() );
+		System.out.println("Response output: " + getResponse() );
 	}
 	
 	private String buildReturn(InputStreamReader reader) throws IOException 
