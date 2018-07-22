@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import https_service.ChangeSentimentHttpsRequest;
 
-class ResponseCodeTest {
+public class ResponseCodeTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -53,6 +53,18 @@ class ResponseCodeTest {
 			ChangeSentimentHttpsRequest request = new ChangeSentimentHttpsRequest();
 			request.sendPost("neutral");
 			assertEquals(200, request.getResponseCode());
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	final void testChangeToInvalidSentiment() {
+		try {
+			ChangeSentimentHttpsRequest request = new ChangeSentimentHttpsRequest();
+			request.sendPost("hopeless");
+			assertEquals(400, request.getResponseCode());
 		} 
 		catch (IOException e) {
 			e.printStackTrace();

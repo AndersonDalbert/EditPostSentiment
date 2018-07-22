@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import https_service.ChangeSentimentHttpsRequest;
 import response.Response;
 
-class CurrentSentimentTest {
+public class CurrentSentimentTest {
 
 	@BeforeEach
 	void setUp() throws Exception {

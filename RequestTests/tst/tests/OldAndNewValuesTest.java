@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import https_service.ChangeSentimentHttpsRequest;
 import response.Response;
 
-class OldAndNewValuesTest {
+public class OldAndNewValuesTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -53,7 +53,7 @@ class OldAndNewValuesTest {
 			e.printStackTrace();
 		}
 		Response response = new Response( changeRequest.getResponse() );
-		assertEquals( "add-tag", response.getLastRequestField() );
+		assertEquals( "add_tag", response.getLastRequestField() );
 	}
 
 }

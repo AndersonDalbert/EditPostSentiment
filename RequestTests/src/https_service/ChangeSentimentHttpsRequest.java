@@ -1,10 +1,11 @@
 package https_service;
 
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
+
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -37,6 +38,7 @@ public class ChangeSentimentHttpsRequest {
 	 * @return response
 	 */
 	public String getResponse() {
+		System.out.println(this.response);
 		return response;
 	}
 	
@@ -61,7 +63,7 @@ public class ChangeSentimentHttpsRequest {
 		addDataToRequest(sentiment, request);
 		updateClassAttributes(request);
 		
-		printResponse();
+//		printResponse();
 	}
 
 	private HttpsURLConnection startHttpsConnection() throws MalformedURLException, IOException 
@@ -85,7 +87,12 @@ public class ChangeSentimentHttpsRequest {
 	private void updateClassAttributes(HttpsURLConnection request) throws IOException 
 	{
 		setResponseCode( request.getResponseCode() );
-		InputStreamReader streamReader = new InputStreamReader( request.getInputStream() );
+		
+		InputStream streamReader = 
+				( this.responseCode < HttpsURLConnection.HTTP_BAD_REQUEST ) ? 
+						request.getInputStream() :
+						request.getErrorStream();
+				
 		setResponse( buildReturn(streamReader) );
 	}
 
@@ -96,12 +103,6 @@ public class ChangeSentimentHttpsRequest {
 		outputStream.close();
 	}
 
-	private void printResponse() 
-	{
-		System.out.println("Response code: " + this.getResponseCode() );
-		System.out.println("Response output: " + getResponse() );
-	}
-	
 	private void setRequestHeaders(HttpsURLConnection request) throws ProtocolException 
 	{
 		request.setRequestMethod("POST");
@@ -112,15 +113,17 @@ public class ChangeSentimentHttpsRequest {
 		request.setRequestProperty("Content-Type", CONTENT_TYPE);
 	}
 
-	private String buildReturn(InputStreamReader reader) throws IOException 
+	private String buildReturn(InputStream inputStream) throws IOException 
 	{
-		BufferedReader in = new BufferedReader(reader);
-		String line = null;
-		StringBuffer messageBuilder = new StringBuffer();
-		while ( (line = in.readLine() ) != null) {
-		   messageBuilder.append(line);
+		BufferedInputStream bis = new BufferedInputStream(inputStream);
+		ByteArrayOutputStream buf = new ByteArrayOutputStream();
+		int result = bis.read();
+		while(result != -1) {
+		    buf.write((byte) result);
+		    result = bis.read();
 		}
-		return messageBuilder.toString();
+		// StandardCharsets.UTF_8.name() > JDK 7
+		return buf.toString("UTF-8");
 	}
 	
 	/**
